@@ -83,7 +83,7 @@ A modern and responsive web application designed to help students and job seeker
      - Copy the configuration object
 
 4. **Environment Configuration**
-   - Create a `.env` file in the root directory
+   - Modify the `.env` file in the root directory
    - Add your Firebase configuration:
      ```env
      REACT_APP_FIREBASE_API_KEY=your_api_key

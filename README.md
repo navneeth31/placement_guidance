@@ -64,7 +64,7 @@ A modern and responsive web application designed to help students and job seeker
 
 1. **Clone the Repository**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/navneeth31/placement_guidance.git
    cd placement-guidance
    ```
 

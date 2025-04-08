@@ -52,7 +52,6 @@ A modern and responsive web application designed to help students and job seeker
 - **Backend:**
   - Firebase Authentication
   - Cloud Firestore (Real-time database)
-  - Firebase Hosting
 
 ## Prerequisites
 

@@ -223,21 +223,21 @@ export default function ResourceLibrary() {
   });
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <div className="flex justify-between items-center mb-6">
+    <div className="max-w-4xl mx-auto p-4 sm:p-6">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 space-y-4 sm:space-y-0">
         <h2 className="text-2xl font-bold">Resource Library</h2>
-        <div className="flex space-x-4">
+        <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
           <input
             type="text"
             placeholder="Search resources..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="px-4 py-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
+            className="px-4 py-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full sm:w-auto"
           />
           <select
             value={selectedDifficulty}
             onChange={(e) => setSelectedDifficulty(e.target.value)}
-            className="px-4 py-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
+            className="px-4 py-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full sm:w-auto"
           >
             <option value="All">All Levels</option>
             <option value="Beginner">Beginner</option>
@@ -248,34 +248,34 @@ export default function ResourceLibrary() {
       </div>
 
       {/* Category Tabs */}
-      <div className="flex space-x-4 mb-6">
+      <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-2 sm:space-y-0 mb-6">
         <button
           onClick={() => setActiveCategory('technical')}
-          className={"px-4 py-2 rounded " + (activeCategory === 'technical' ? 'bg-blue-600 text-white' : 'bg-gray-200')}
+          className={"px-4 py-2 rounded w-full sm:w-auto " + (activeCategory === 'technical' ? 'bg-blue-600 text-white' : 'bg-gray-200')}
         >
           Technical Skills
         </button>
         <button
           onClick={() => setActiveCategory('softSkills')}
-          className={"px-4 py-2 rounded " + (activeCategory === 'softSkills' ? 'bg-blue-600 text-white' : 'bg-gray-200')}
+          className={"px-4 py-2 rounded w-full sm:w-auto " + (activeCategory === 'softSkills' ? 'bg-blue-600 text-white' : 'bg-gray-200')}
         >
           Soft Skills
         </button>
         <button
           onClick={() => setActiveCategory('interview')}
-          className={"px-4 py-2 rounded " + (activeCategory === 'interview' ? 'bg-blue-600 text-white' : 'bg-gray-200')}
+          className={"px-4 py-2 rounded w-full sm:w-auto " + (activeCategory === 'interview' ? 'bg-blue-600 text-white' : 'bg-gray-200')}
         >
           Interview Prep
         </button>
       </div>
 
       {/* Resource Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         {filteredResources.map(resource => (
           <div key={resource.id} className="border rounded-lg p-4 hover:border-blue-500">
-            <div className="flex justify-between items-start mb-2">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2 space-y-2 sm:space-y-0">
               <h3 className="font-semibold text-lg">{resource.title}</h3>
-              <span className={"px-2 py-1 text-xs rounded " + 
+              <span className={"px-2 py-1 text-xs rounded whitespace-nowrap " + 
                 (resource.difficulty === 'Beginner' ? 'bg-green-100 text-green-800' :
                  resource.difficulty === 'Intermediate' ? 'bg-yellow-100 text-yellow-800' :
                  resource.difficulty === 'Advanced' ? 'bg-red-100 text-red-800' :
@@ -284,13 +284,13 @@ export default function ResourceLibrary() {
               </span>
             </div>
             <p className="text-gray-600 mb-4">{resource.description}</p>
-            <div className="flex justify-between items-center">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-2 sm:space-y-0">
               <span className="text-sm text-gray-500">{resource.type}</span>
               <a
                 href={resource.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-center"
               >
                 Visit Resource
               </a>

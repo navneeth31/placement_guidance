@@ -8,20 +8,7 @@ import ResumePDF from './ResumePDF';
 
 export default function ResumeBuilder() {
   const { currentUser } = useAuth();
-  const [resume, setResume] = useState({
-    personalInfo: {
-      name: '',
-      email: '',
-      phone: '',
-      location: '',
-      linkedin: '',
-      github: ''
-    },
-    education: [],
-    experience: [],
-    skills: [],
-    projects: []
-  });
+  const [resume, setResume] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
@@ -29,7 +16,14 @@ export default function ResumeBuilder() {
     try {
       const resumeData = await userService.getResume(currentUser.uid);
       setResume(resumeData || {
-        personalInfo: {},
+        personalInfo: {
+          name: '',
+          email: '',
+          phone: '',
+          location: '',
+          linkedin: '',
+          github: ''
+        },
         education: [],
         experience: [],
         projects: [],
@@ -38,15 +32,41 @@ export default function ResumeBuilder() {
       setLoading(false);
     } catch (error) {
       console.error('Error loading resume:', error);
+      setResume({
+        personalInfo: {
+          name: '',
+          email: '',
+          phone: '',
+          location: '',
+          linkedin: '',
+          github: ''
+        },
+        education: [],
+        experience: [],
+        projects: [],
+        skills: []
+      });
       setLoading(false);
     }
   }, [currentUser.uid]);
 
   useEffect(() => {
-    loadResume();
-  }, [loadResume]);
+    if (currentUser?.uid) {
+      loadResume();
+    }
+  }, [currentUser?.uid, loadResume]);
+
+  if (!resume || loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
 
   const handleSave = async () => {
+    if (!currentUser?.uid || saving) return;
+    
     setSaving(true);
     try {
       await userService.saveResume(currentUser.uid, resume);
@@ -112,21 +132,6 @@ export default function ResumeBuilder() {
     }));
   };
 
-  const removeSkill = (index) => {
-    setResume(prev => ({
-      ...prev,
-      skills: [...(prev.skills || [])].filter((_, i) => i !== index)
-    }));
-  };
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-      </div>
-    );
-  }
-
   return (
     <motion.div 
       initial={{ opacity: 0 }}
@@ -144,18 +149,20 @@ export default function ResumeBuilder() {
             <h2 className="text-xl font-semibold text-slate-800 mb-2">Download Resume</h2>
             <p className="text-slate-600">Generate a professional PDF version of your resume</p>
           </div>
-          <PDFDownloadLink
-            document={<ResumePDF resume={resume} />}
-            fileName={`${resume.personalInfo.name?.split(' ')[0] || 'Resume'}_${new Date().toISOString().split('T')[0]}.pdf`}
-            className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:bg-gray-400"
-          >
-            {({ blob, url, loading, error }) => {
-              if (error) {
-                return 'Error generating PDF';
-              }
-              return loading ? 'Generating PDF...' : 'Download PDF';
-            }}
-          </PDFDownloadLink>
+          {resume && (
+            <PDFDownloadLink
+              document={<ResumePDF resume={resume} />}
+              fileName={`${resume.personalInfo?.name?.split(' ')[0] || 'Resume'}_${new Date().toISOString().split('T')[0]}.pdf`}
+              className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:bg-gray-400"
+            >
+              {({ blob, url, loading, error }) => {
+                if (error) {
+                  return 'Error generating PDF';
+                }
+                return loading ? 'Generating...' : 'Download PDF';
+              }}
+            </PDFDownloadLink>
+          )}
         </div>
       </motion.section>
 
@@ -426,14 +433,6 @@ export default function ResumeBuilder() {
                 value={skill}
                 onChange={e => handleSkillChange(index, e.target.value)}
               />
-              <button
-                onClick={() => removeSkill(index)}
-                className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
-                </svg>
-              </button>
             </div>
           ))}
         </div>

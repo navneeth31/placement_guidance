@@ -67,14 +67,17 @@ const styles = StyleSheet.create({
   skills: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 5,
+    gap: 8,
+    marginTop: 5,
   },
   skill: {
     fontSize: 10,
     backgroundColor: '#e8f5e8',
-    padding: '3 8',
-    borderRadius: 3,
+    padding: '4 10',
+    borderRadius: 4,
     color: '#1a5d1a',
+    marginRight: 5,
+    marginBottom: 5,
   },
   bullet: {
     width: 3,
@@ -162,11 +165,11 @@ const ResumePDF = ({ resume }) => (
       )}
 
       {/* Skills */}
-      {resume.skills?.length > 0 && (
+      {(resume.skills || []).length > 0 && (
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Skills</Text>
           <View style={styles.skills}>
-            {resume.skills.map((skill, index) => (
+            {(resume.skills || []).map((skill, index) => (
               <Text key={index} style={styles.skill}>{skill}</Text>
             ))}
           </View>
